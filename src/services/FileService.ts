@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as fsp from 'fs/promises';
 import * as path from 'path';
+import * as md5 from 'md5';
 
 export class FileService {
 	private OUTPUT_PATH: string;
@@ -30,6 +31,17 @@ export class FileService {
 			return `Файл по пути "${fPath}" с контентом "${content}" успешно создан.`;
 		} catch (error) {
 			return `Ошибка! Файл по пути "${fPath}" не был создан. "${error}"`;
+		}
+	};
+
+	public getFileChecksum = async (filePath: string): Promise<string> => {
+		const fPath = path.resolve(this.OUTPUT_PATH, filePath);
+
+		try {
+			const buffer = await fsp.readFile(fPath);
+			return md5(buffer);
+		} catch (error) {
+			return `Ошибка! Не удалось прочитать контрольную сумму файла по пути "${fPath}". "${error}"`;
 		}
 	};
 }
