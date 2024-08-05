@@ -1,0 +1,9 @@
+# Visual Studio Code settings
+/.vscode
+
+# Output directory
+/dist
+
+# Node modules and packages
+/node_modules
+/yarn.lock

@@ -1,0 +1,16 @@
+{
+	"name": "test-task",
+	"version": "0.0.1",
+	"author": "yvrxslvw <yvrxslvv@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"dev": "tsc && node ./dist/index.js"
+	},
+	"dependencies": {
+		"md5": "^2.3.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.1.0",
+		"typescript": "^5.5.4"
+	}
+}
