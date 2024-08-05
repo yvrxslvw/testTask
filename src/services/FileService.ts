@@ -10,4 +10,15 @@ export class FileService {
 
 		!fs.existsSync(this.OUTPUT_PATH) && fsp.mkdir(this.OUTPUT_PATH);
 	}
+
+	public createFolder = async (folderPath: string, folderName: string): Promise<string> => {
+		const fPath = path.resolve(this.OUTPUT_PATH, folderPath, folderName);
+
+		try {
+			await fsp.mkdir(fPath);
+			return `Папка по пути "${fPath}" успешно создана.`;
+		} catch (error) {
+			return `Ошибка! Папка по пути "${fPath}" не была создана. "${error}"`;
+		}
+	};
 }
