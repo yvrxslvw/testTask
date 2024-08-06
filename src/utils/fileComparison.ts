@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { formatDate } from './formatDate';
-import { timer } from './timer';
 import { LoggerService } from '../services/LoggerService';
 import { FileService } from '../services/FileService';
 
@@ -36,7 +35,26 @@ export const fileComparison = async (
 		}),
 	);
 
-	const watcher = fs.watch(comparisonDirectory, async (_, fileName) => {
+	const creationWatcher = fs.watch(resultDirectory, async (_, newFileName) => {
+		const filePath = path.resolve(resultDirectory, newFileName ?? '');
+		if (!fs.existsSync(filePath) || !newFileName) return;
+		const checksum = await fileService.getFileChecksum(filePath);
+		Object.keys(creationChecksums).forEach(oldFileName => {
+			if (creationChecksums[oldFileName] === checksum) {
+				delete creationChecksums[oldFileName];
+				creationChecksums[newFileName] = checksum;
+				Object.keys(coincidences).forEach(key => {
+					if (key === oldFileName) {
+						const fileBName = coincidences[key];
+						delete coincidences[key];
+						coincidences[newFileName] = fileBName;
+					}
+				});
+			}
+		});
+	});
+
+	const comparisonWatcher = fs.watch(comparisonDirectory, async (_, fileName) => {
 		const filePath = path.resolve(comparisonDirectory, fileName ?? '');
 		if (!fs.existsSync(filePath) || !fileName) return;
 		comparisonChecksums[fileName] = await fileService.getFileChecksum(filePath);
@@ -44,10 +62,24 @@ export const fileComparison = async (
 			if (creationChecksums[createdFile] === comparisonChecksums[fileName]) coincidences[createdFile] = fileName;
 		});
 	});
-	await timer(waitingTime * 1000);
-	watcher.close();
+
+	let tick = 0;
+	await new Promise(res => {
+		let interval = setInterval(() => {
+			tick++;
+			if (tick >= waitingTime || Object.keys(coincidences).length === Object.keys(creationChecksums).length) {
+				clearInterval(interval);
+				res(undefined);
+			}
+		}, 1000);
+	});
+
+	creationWatcher.close();
+	comparisonWatcher.close();
 	console.log(
-		`[${formatDate(new Date(), true)}] Сравнение каталогов закончено. Совпадений: ${Object.keys(coincidences).length}.`,
+		`[${formatDate(new Date(), true)}] Сравнение каталогов закончено. Совпадений: ${
+			Object.keys(coincidences).length
+		} из ${Object.keys(creationChecksums).length}.`,
 	);
 	Object.keys(coincidences).forEach(async createdFile => {
 		await loggerService.appendLog(`Совпадение файла "${createdFile}" с файлом "${coincidences[createdFile]}".`);
