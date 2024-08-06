@@ -28,12 +28,14 @@ export const fileComparison = async (
 			index === arr.length - 1 && res(undefined);
 		}),
 	);
-	await new Promise(res =>
-		fs.readdirSync(comparisonDirectory).forEach(async (file, index, arr) => {
+	await new Promise(res => {
+		const files = fs.readdirSync(comparisonDirectory);
+		if (files.length === 0) return res(undefined);
+		files.forEach(async (file, index, arr) => {
 			comparisonChecksums[file] = await fileService.getFileChecksum(path.resolve(comparisonDirectory, file));
 			index === arr.length - 1 && res(undefined);
-		}),
-	);
+		});
+	});
 
 	const creationWatcher = fs.watch(resultDirectory, async (_, newFileName) => {
 		const filePath = path.resolve(resultDirectory, newFileName ?? '');
