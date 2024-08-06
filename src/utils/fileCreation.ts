@@ -33,6 +33,8 @@ export const fileCreation = async (
 		}, creationGroupInterval * 1000);
 	});
 
+	await new Promise(res => setTimeout(res, 2 * 1000));
+
 	console.log(
 		`[${formatDate(
 			new Date(),

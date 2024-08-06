@@ -10,6 +10,13 @@ const fileService = new FileService(creationDirectory);
 const loggerService = new LoggerService(creationDirectory);
 
 (async () => {
-	const resultDirectory = await fileCreation(fileService, loggerService, creationDirectory, totalFilesCount, groupFilesCount, creationGroupInterval);
+	const resultDirectory = await fileCreation(
+		fileService,
+		loggerService,
+		creationDirectory,
+		totalFilesCount,
+		groupFilesCount,
+		creationGroupInterval,
+	);
 	await fileComparison(fileService, loggerService, resultDirectory, comparisonDirectory, waitingTime);
 })();
