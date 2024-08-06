@@ -4,7 +4,9 @@
 	"author": "yvrxslvw <yvrxslvv@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"dev": "tsc && node ./dist/index.js"
+		"dev": "tsc && node ./dist/index.js",
+		"build": "tsc",
+		"prod": "node ./dist/index.js"
 	},
 	"dependencies": {
 		"md5": "^2.3.0",
