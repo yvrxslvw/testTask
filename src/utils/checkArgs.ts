@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const availArgs = {
+	creationDirectory: '--creation-directory',
 	totalFilesCount: '--total-files-count',
 	groupFilesCount: '--group-files-count',
 	creationGroupInterval: '--creation-group-interval',
@@ -13,6 +14,7 @@ const availArgs = {
 };
 
 interface ICheckArgs {
+	creationDirectory: string;
 	totalFilesCount: number;
 	groupFilesCount: number;
 	creationGroupInterval: number;
@@ -29,12 +31,13 @@ const throwExit = (code: number, message?: string): never => {
 export const checkArgs = (args: string[]): ICheckArgs => {
 	if (args.length < 1) return throwExit(1, 'Ошибка! Вы не указали аргументы при запуске программы.');
 	if (args.find(val => val === availArgs.help || val === availArgs.shortHelp)) return throwExit(0);
-	else if (args.length < 5) return throwExit(1, 'Ошибка! Вы указали не все аргументы.');
+	else if (args.length < 6) return throwExit(1, 'Ошибка! Вы указали не все аргументы.');
 	for (const arg of args) {
 		if (!Object.values(availArgs).find(val => val === arg.split('=')[0]))
 			return throwExit(1, `Ошибка! Неизвестный аргумент ${arg.split('=')[0]}.`);
 	}
 
+	let creationDirectory: string = '';
 	let totalFilesCount: number = 0;
 	let groupFilesCount: number = 0;
 	let creationGroupInterval: number = 0;
@@ -47,6 +50,9 @@ export const checkArgs = (args: string[]): ICheckArgs => {
 		const value = total[1];
 
 		switch (cmd) {
+			case availArgs.creationDirectory:
+				creationDirectory = path.resolve(value);
+				break;
 			case availArgs.totalFilesCount:
 				totalFilesCount = Number.parseInt(value);
 				break;
@@ -67,7 +73,15 @@ export const checkArgs = (args: string[]): ICheckArgs => {
 
 	if (isNaN(totalFilesCount) || isNaN(groupFilesCount) || isNaN(creationGroupInterval) || isNaN(waitingTime))
 		return throwExit(1, 'Ошибка! Некорректное значение одного из аргументов.');
-	if (!fs.existsSync(comparisonDirectory)) return throwExit(1, 'Ошибка! Указанный каталог не существует.');
+	if (!fs.existsSync(comparisonDirectory) || !fs.existsSync(creationDirectory))
+		return throwExit(1, 'Ошибка! Указанный каталог не существует.');
 
-	return { creationGroupInterval, groupFilesCount, totalFilesCount, comparisonDirectory, waitingTime };
+	return {
+		creationDirectory,
+		creationGroupInterval,
+		groupFilesCount,
+		totalFilesCount,
+		comparisonDirectory,
+		waitingTime,
+	};
 };

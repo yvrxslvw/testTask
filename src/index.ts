@@ -1,7 +1,6 @@
 import { checkArgs } from './utils/checkArgs';
 
-const { totalFilesCount, groupFilesCount, creationGroupInterval, comparisonDirectory, waitingTime } = checkArgs(
-	process.argv.slice(2),
-);
+// yarn dev --creation-directory=./dist/output --total-files-count=10 --group-files-count=2 --creation-group-interval=5 --comparison-directory=./dist/output/B --waiting-time=30
 
-console.log(totalFilesCount, groupFilesCount, creationGroupInterval, comparisonDirectory, waitingTime);
+const { creationDirectory, totalFilesCount, groupFilesCount, creationGroupInterval, comparisonDirectory, waitingTime } =
+	checkArgs(process.argv.slice(2));

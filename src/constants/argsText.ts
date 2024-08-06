@@ -1,5 +1,6 @@
 export const argsText =
 	'\nИспользуйте следующие аргументы для запуска программы:\n' +
+	'\t--creation-directory=<value>\t\tКаталог для создания;\n' +
 	'\t--total-files-count=<value>\t\tОбщее количество файлов в каталоге;\n' +
 	'\t--group-files-count=<value>\t\tКоличество файлов в группе, которые будут создаваться с интервалом;\n' +
 	'\t--creation-group-interval=<value>\tИнтервал создания групп файлов в секундах;\n' +
