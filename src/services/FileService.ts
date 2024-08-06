@@ -7,7 +7,7 @@ export class FileService {
 	private OUTPUT_PATH: string;
 
 	constructor(outputFolder: string) {
-		this.OUTPUT_PATH = path.resolve('dist', outputFolder);
+		this.OUTPUT_PATH = path.resolve(outputFolder);
 
 		!fs.existsSync(this.OUTPUT_PATH) && fsp.mkdir(this.OUTPUT_PATH);
 	}

@@ -9,7 +9,7 @@ export class LoggerService {
 	private FILE_NAME: string;
 
 	constructor(logsPath: string) {
-		this.LOGS_PATH = path.resolve('dist', logsPath);
+		this.LOGS_PATH = path.resolve(logsPath);
 		this.FILE_NAME = formatDate(new Date()) + '.log';
 
 		!fs.existsSync(this.LOGS_PATH) && fsp.mkdir(this.LOGS_PATH);
