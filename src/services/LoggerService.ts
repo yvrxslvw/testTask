@@ -11,8 +11,6 @@ export class LoggerService {
 	constructor(logsPath: string) {
 		this.LOGS_PATH = path.resolve(logsPath);
 		this.FILE_NAME = formatDate(new Date()) + '.log';
-
-		!fs.existsSync(this.LOGS_PATH) && fsp.mkdir(this.LOGS_PATH);
 	}
 
 	public appendLog = async (content: string): Promise<void> => {

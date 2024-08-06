@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as fsp from 'fs/promises';
 import * as path from 'path';
 import * as md5 from 'md5';
@@ -8,8 +7,6 @@ export class FileService {
 
 	constructor(outputFolder: string) {
 		this.OUTPUT_PATH = path.resolve(outputFolder);
-
-		!fs.existsSync(this.OUTPUT_PATH) && fsp.mkdir(this.OUTPUT_PATH);
 	}
 
 	public createFolder = async (folderPath: string): Promise<string> => {
