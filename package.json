@@ -7,11 +7,13 @@
 		"dev": "tsc && node ./dist/index.js"
 	},
 	"dependencies": {
-		"md5": "^2.3.0"
+		"md5": "^2.3.0",
+		"uuid": "^10.0.0"
 	},
 	"devDependencies": {
 		"@types/md5": "^2.3.5",
 		"@types/node": "^22.1.0",
+		"@types/uuid": "^10.0.0",
 		"typescript": "^5.5.4"
 	}
 }
