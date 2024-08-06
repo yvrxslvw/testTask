@@ -33,13 +33,14 @@ export const fileCreation = async (
 		}, creationGroupInterval * 1000);
 	});
 
-	await new Promise(res => setTimeout(res, 2 * 1000));
-
 	console.log(
 		`[${formatDate(
 			new Date(),
 			true,
 		)}] Создание файлов закончено. Всего файлов ${filesCount}шт, файлов в группе ${groupFilesCount}шт с интервалом ${creationGroupInterval}с`,
 	);
+
+	await new Promise(res => setTimeout(res, 2 * 1000));
+
 	return path.resolve(creationDirectory, folderName);
 };

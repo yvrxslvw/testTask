@@ -83,7 +83,24 @@ export const fileComparison = async (
 			Object.keys(coincidences).length
 		} из ${Object.keys(creationChecksums).length}.`,
 	);
+	
 	Object.keys(coincidences).forEach(async createdFile => {
 		await loggerService.appendLog(`Совпадение файла "${createdFile}" с файлом "${coincidences[createdFile]}".`);
+	});
+
+	await new Promise(res => setTimeout(res, 2 * 1000));
+	Object.keys(creationChecksums).forEach(async file => {
+		if (!Object.values(comparisonChecksums).find(val => creationChecksums[file] === val))
+			await loggerService.appendLog(
+				`Файла с контрольной суммой ${creationChecksums[file]} (название файла: ${file}) не существует в каталоге сравнения (Каталог Б).`,
+			);
+	});
+
+	await new Promise(res => setTimeout(res, 2 * 1000));
+	Object.keys(comparisonChecksums).forEach(async file => {
+		if (!Object.values(creationChecksums).find(val => comparisonChecksums[file] === val))
+			await loggerService.appendLog(
+				`Файла с контрольной суммой ${comparisonChecksums[file]} (название файла: ${file}) не существует в каталоге создания (Каталог А).`,
+			);
 	});
 };
