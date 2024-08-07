@@ -3,6 +3,7 @@ import * as path from 'path';
 import { FileService } from '../services/FileService';
 import { LoggerService } from '../services/LoggerService';
 import { formatDate } from './formatDate';
+import { randomString } from './randomString';
 
 export const fileCreation = async (
 	fileService: FileService,
@@ -13,6 +14,9 @@ export const fileCreation = async (
 	creationGroupInterval: number,
 ): Promise<string> => {
 	console.log(`[${formatDate(new Date(), true)}] Процесс создания файлов...`);
+
+	await new Promise(res => setTimeout(res, 2 * 1000));
+
 	const folderName = formatDate(new Date());
 	let filesCount = 0;
 
@@ -21,7 +25,9 @@ export const fileCreation = async (
 	await new Promise(res => {
 		const interval = setInterval(async () => {
 			for (let i = 0; i < groupFilesCount; i++) {
-				const result = await fileService.createFile(`${folderName}/${uuidv4()}`, Date.now().toString());
+				const lines = [];
+				for (let i = 0; i < 40; i++) lines.push(randomString(80));
+				const result = await fileService.createFile(`${folderName}/${uuidv4()}`, lines.join('\n'));
 				await loggerService.appendLog(result);
 				filesCount++;
 			}
