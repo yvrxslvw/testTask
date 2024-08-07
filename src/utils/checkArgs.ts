@@ -73,6 +73,8 @@ export const checkArgs = (args: string[]): ICheckArgs => {
 
 	if (isNaN(totalFilesCount) || isNaN(groupFilesCount) || isNaN(creationGroupInterval) || isNaN(waitingTime))
 		return throwExit(1, 'Ошибка! Некорректное значение одного из аргументов.');
+	if (totalFilesCount < 1 || groupFilesCount < 1 || creationGroupInterval < 1 || waitingTime < 1)
+		return throwExit(1, 'Ошибка! Численные аргументы не могут быть меньше 1.');
 	if (!fs.existsSync(comparisonDirectory) || !fs.existsSync(creationDirectory))
 		return throwExit(1, 'Ошибка! Указанный каталог не существует.');
 
