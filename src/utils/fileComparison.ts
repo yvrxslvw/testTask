@@ -84,30 +84,33 @@ export const fileComparison = async (
 		} из ${Object.keys(creationChecksums).length}.`,
 	);
 
-	await new Promise(res =>
-		Object.keys(coincidences).forEach(async (createdFile, index, arr) => {
-			await loggerService.appendLog(`Совпадение файла "${createdFile}" с файлом "${coincidences[createdFile]}".`);
-			if (index === arr.length - 1) res(undefined);
-		}),
-	);
+	if (Object.keys(coincidences).length !== 0)
+		await new Promise(res =>
+			Object.keys(coincidences).forEach(async (createdFile, index, arr) => {
+				await loggerService.appendLog(`Совпадение файла "${createdFile}" с файлом "${coincidences[createdFile]}".`);
+				if (index === arr.length - 1) res(undefined);
+			}),
+		);
 
-	await new Promise(res =>
-		Object.keys(creationChecksums).forEach(async (file, index, arr) => {
-			if (!Object.values(comparisonChecksums).find(val => creationChecksums[file] === val))
-				await loggerService.appendLog(
-					`Файла ${file} (md5: ${creationChecksums[file]}) не существует в каталоге сравнения (Каталог Б).`,
-				);
-			if (index === arr.length - 1) res(undefined);
-		}),
-	);
+	if (Object.keys(creationChecksums).length !== 0)
+		await new Promise(res =>
+			Object.keys(creationChecksums).forEach(async (file, index, arr) => {
+				if (!Object.values(comparisonChecksums).find(val => creationChecksums[file] === val))
+					await loggerService.appendLog(
+						`Файла ${file} (md5: ${creationChecksums[file]}) не существует в каталоге сравнения (Каталог Б).`,
+					);
+				if (index === arr.length - 1) res(undefined);
+			}),
+		);
 
-	new Promise(res =>
-		Object.keys(comparisonChecksums).forEach(async (file, index, arr) => {
-			if (!Object.values(creationChecksums).find(val => comparisonChecksums[file] === val))
-				await loggerService.appendLog(
-					`Файла ${file} (md5: ${comparisonChecksums[file]}) не существует в каталоге создания (Каталог А).`,
-				);
-			if (index === arr.length - 1) res(undefined);
-		}),
-	);
+	if (Object.keys(comparisonChecksums).length !== 0)
+		new Promise(res =>
+			Object.keys(comparisonChecksums).forEach(async (file, index, arr) => {
+				if (!Object.values(creationChecksums).find(val => comparisonChecksums[file] === val))
+					await loggerService.appendLog(
+						`Файла ${file} (md5: ${comparisonChecksums[file]}) не существует в каталоге создания (Каталог А).`,
+					);
+				if (index === arr.length - 1) res(undefined);
+			}),
+		);
 };

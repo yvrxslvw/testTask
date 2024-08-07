@@ -15,12 +15,12 @@ export const fileCreation = async (
 ): Promise<string> => {
 	console.log(`[${formatDate(new Date(), true)}] Процесс создания файлов...`);
 
-	await new Promise(res => setTimeout(res, 2 * 1000));
-
 	const folderName = formatDate(new Date());
 	let filesCount = 0;
 
 	await loggerService.appendLog(await fileService.createFolder(folderName));
+
+	await new Promise(res => setTimeout(res, 2 * 1000));
 
 	await new Promise(res => {
 		const interval = setInterval(async () => {
