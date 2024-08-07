@@ -25,7 +25,7 @@ export class FileService {
 
 		try {
 			await fsp.writeFile(fPath, content);
-			return `Файл по пути "${fPath}" с контентом "${content}" успешно создан.`;
+			return `Файл по пути "${fPath}" успешно создан.`;
 		} catch (error) {
 			return `Ошибка! Файл по пути "${fPath}" не был создан. "${error}"`;
 		}
