@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "tsc && node ./dist/index.js",
 		"build": "tsc",
-		"prod": "node ./dist/index.js"
+		"prod": "node ./dist/index.js",
+		"clean": "rm -rf ./dist/output/*"
 	},
 	"dependencies": {
 		"md5": "^2.3.0",
